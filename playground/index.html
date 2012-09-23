@@ -5,11 +5,25 @@
 	<title>A map thing!</title>
     <meta name="viewport"
 		  content="width=device-width, initial-scale=1.0, user-scalable=no" />
-	<link rel="stylesheet" type="text/css" href="maps.css" />
-	<script type="text/javascript" src="maps.js"></script>
+	<link rel="stylesheet" href="maps.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDORq7-X81z4tMI8GnQrzBQKzHZVyvpBMo&amp;sensor=true"></script>
+	<script src="maps.js"></script>
 </head>
 <body>
-	<div id="map_canvas">
+	<div id="top">
+		<form>
+			<button name="locate_me" id="locate_me_button">Locate Me</button>
+			<input title="Whatcha lookin' for?" type="text" name="query" id="query_input" />
+			<label>
+				<input type="checkbox" name="mapmaker" id="mapmaker_checkbox" value="mapmaker" />
+				MapMaker
+			</label>
+		</form>
+	</div>
+	<div id="map_canvas_container">
+		<div id="map_canvas">
+		</div>
 	</div>
 </body>
 </html>

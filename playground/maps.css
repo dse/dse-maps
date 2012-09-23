@@ -1,13 +1,23 @@
 html {
 	margin: 0;
 	padding: 0;
+	height: 100%;
 }
 body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+	width: 100%;
 	display: table;
 }
-body > * {
+
+body > div {
 	display: table-row;
+}
+body > div#map_canvas_container {
+	height: 100%;
+}
+
+#map_canvas {
+	height: 100%;
 }
