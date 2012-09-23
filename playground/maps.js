@@ -47,21 +47,43 @@ function $ID(id) {
 }
 
 (function ($) {
+	var defaults = {
+		"latitude"  : 0,
+		"longitude" : 0,
+		"zoom"      : 3,
+		"mapType"   : google.maps.MapTypeId.ROADMAP
+	};
 	function initialize() {
 		"use strict";
-		var latitude = Cookies.get("lat");
+
+		var latitude  = Cookies.get("lat");
 		var longitude = Cookies.get("lng");
-		var zoom = Cookies.get("zoom");
-		var mapType = Cookies.get("mapType");
-		latitude  = latitude  ? parseFloat(latitude)  : 0;
-		longitude = longitude ? parseFloat(longitude) : 0;
-		zoom      = zoom      ? parseInt(zoom, 10)    : 0;
+		var zoom      = Cookies.get("zoom");
+		var mapType   = Cookies.get("mapType");
+
+		latitude  = latitude  ? parseFloat(latitude)  : defaults.latitude;
+		longitude = longitude ? parseFloat(longitude) : defaults.longitude;
+		zoom      = zoom      ? parseInt(zoom, 10)    : defaults.zoom;
 		mapType   = mapType   ? parseInt(mapType, 10) : google.maps.MapTypeId.ROADMAP;
+
 		var map_options = {
-			center: new google.maps.LatLng(latitude, longitude),
-			zoom: zoom,
-			mapTypeId: mapType
+			"center"    : new google.maps.LatLng(latitude, longitude),
+			"zoom"      : zoom,
+			"mapTypeId" : mapType,
+			"mapTypeControlOptions": {
+				"mapTypeIds": [
+					google.maps.MapTypeId.ROADMAP,
+					google.maps.MapTypeId.HYBRID,
+					google.maps.MapTypeId.SATELLITE,
+					google.maps.MapTypeId.TERRAIN
+				]
+			},
+			"panControl": false,
+			"zoomControl": false,
+			"rotateControl": true, // eh?
+			"scaleControl": true
 		};
+
 		var map_canvas = $ID("map_canvas");
 		var map = new google.maps.Map(map_canvas, map_options);
 		
@@ -84,6 +106,7 @@ function $ID(id) {
 		$("#locate_me_button").click(locate_me);
 		$("#mapmaker_checkbox").change(function () {
 			map.setOptions({ "mapMaker": this.checked });
+			return false;
 		}).trigger("change");
 
 		function update_cookies() {
@@ -93,7 +116,6 @@ function $ID(id) {
 			var zoom = map.getZoom();
 			Cookies.set("zoom", zoom);
 		};
-
 		google.maps.event.addListener(map, "center_changed", update_cookies);
 		google.maps.event.addListener(map, "zoom_changed", update_cookies);
 		
