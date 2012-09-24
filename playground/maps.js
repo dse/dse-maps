@@ -103,7 +103,7 @@ function $ID(id) {
 			);
 			return false;
 		}
-		$("#locate_me_button").click(locate_me);
+		//$("#locate_me_button").click(locate_me);
 		$("#mapmaker_checkbox").change(function () {
 			map.setOptions({ "mapMaker": this.checked });
 			return false;
@@ -118,6 +118,20 @@ function $ID(id) {
 		};
 		google.maps.event.addListener(map, "center_changed", update_cookies);
 		google.maps.event.addListener(map, "zoom_changed", update_cookies);
+
+		$("form#places").submit(function () {
+			var form = this;
+			$.ajax({
+				url: "https://maps.googleapis.com/maps/api/place/search/json?" + encodeURIComponent(form.query.value),
+				success: function (data, textStatus, xhr) {
+					alert(JSON.stringify(data));
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert(textStatus);
+				}
+			});
+			return false;
+		});
 		
 	}
 	$(function () {
