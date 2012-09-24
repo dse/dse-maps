@@ -7,7 +7,6 @@ var Cookies = (function () {
 	"use strict";
 	var self = {
 		init: function () {
-			console.log("moo");
 			var all, list;
 			this.cookies = {};
 			all = document.cookie;
@@ -23,11 +22,9 @@ var Cookies = (function () {
 			}, this);
 		},
 		set: function (name, value) {
-			console.log(name, value);
 			document.cookie = name + "=" + encodeURIComponent(value) + "; max-age=31536000";
 			document.cookie = name + "=" + encodeURIComponent(value);
 			this.cookies[name] = value;
-			console.log(document.cookie);
 		},
 		"delete": function (name) {
 			document.cookie = name + "=; max-age=0";
@@ -38,7 +35,6 @@ var Cookies = (function () {
 		}
 	};
 	self.init();
-	console.log(self.cookies);
 	return self;
 }());
 
