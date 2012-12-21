@@ -51,7 +51,7 @@ function $ID(id) {
 	};
 	function initialize() {
 		"use strict";
-
+		
 		var latitude  = Cookies.get("lat");
 		var longitude = Cookies.get("lng");
 		var zoom      = Cookies.get("zoom");
@@ -82,6 +82,12 @@ function $ID(id) {
 
 		var map_canvas = $ID("map_canvas");
 		var map = new google.maps.Map(map_canvas, map_options);
+
+		var update = function() {
+			...
+		};
+		google.maps.event.addListener(map, "center_changed", update);
+		google.maps.event.addListener(map, "zoom_changed", update);
 		
 		function locate_me() {
 			navigator.geolocation.getCurrentPosition(
@@ -99,7 +105,13 @@ function $ID(id) {
 			);
 			return false;
 		}
-		//$("#locate_me_button").click(locate_me);
+
+		$("#locate_me_button").click(function() {
+			console.log("locate");
+			locate_me();
+			return false;
+		});
+
 		$("#mapmaker_checkbox").change(function () {
 			map.setOptions({ "mapMaker": this.checked });
 			return false;
@@ -115,17 +127,50 @@ function $ID(id) {
 		google.maps.event.addListener(map, "center_changed", update_cookies);
 		google.maps.event.addListener(map, "zoom_changed", update_cookies);
 
+		$("form#places input[name='query']").focus();
+
+		var places;
 		$("form#places").submit(function () {
 			var form = this;
-			$.ajax({
-				url: "https://maps.googleapis.com/maps/api/place/search/json?" + encodeURIComponent(form.query.value),
-				success: function (data, textStatus, xhr) {
-					alert(JSON.stringify(data));
-				},
-				error: function (xhr, textStatus, errorThrown) {
-					alert(textStatus);
+			console.log("onsubmit");
+			if (!places) {
+				places = new google.maps.places.PlacesService(map);
+				console.log("places");
+			}
+			var request = {
+				bounds: map.getBounds(),
+				query: form.query.value
+			};
+			var callback = function(results, status) {
+				console.log("callback");
+				switch (status) {
+				case google.maps.places.PlacesServiceStatus.OK:
+					alert(results.length + " result(s) found.");
+					break;
+				case google.maps.places.PlacesServiceStatus.ERROR:
+					alert("Problem contacting Google's servers.");
+					break;
+				case google.maps.places.PlacesServiceStatus.INVALID_REQUEST:
+					alert("Invalid request.");
+					break;
+				case google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT:
+					alert("You've done too many queries, sorry.");
+					break;
+				case google.maps.places.PlacesServiceStatus.REQUEST_DENIED:
+					alert("Your web page is not allowed to use the Places service.");
+					break;
+				case google.maps.places.PlacesServiceStatus.UNKNOWN_ERROR:
+					alert("Can't do a search because of a server error.");
+					break;
+				case google.maps.places.PlacesServiceStatus.ZERO_RESULTS:
+					alert("No results found.");
+					break;
+				default:
+					alert("A *really* unknown error!");
+					break;
 				}
-			});
+			};
+			places.textSearch(request, callback);
 			return false;
 		});
 		

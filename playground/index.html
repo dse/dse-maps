@@ -7,13 +7,14 @@
 		  content="width=device-width, initial-scale=1.0, user-scalable=no" />
 	<link rel="stylesheet" href="maps.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDORq7-X81z4tMI8GnQrzBQKzHZVyvpBMo&amp;sensor=true"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDORq7-X81z4tMI8GnQrzBQKzHZVyvpBMo&amp;sensor=true&amp;libraries=places"></script>
 	<script src="maps.js"></script>
 </head>
 <body>
 	<div id="top">
 		<form id="places">
 			<input title="Whatcha lookin' for?" type="text" name="query" id="query_input" />
+			<input type="submit" value="Find" />
 			<button name="locate_me" id="locate_me_button">Locate Me</button>
 			<label>
 				<input type="checkbox" name="mapmaker" id="mapmaker_checkbox" value="yes" />
